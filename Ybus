@@ -1,0 +1,21 @@
+lineas = [1 2 0 0.125 0 0; 1 3 0 0.250 0 0;2 3 0 0.250 0 -0.80; 1 4 0 0.400 0 0; 2 4 0 0.200 0 -0.80];
+     
+B = max(max(lineas(:,1:2)));  
+% creo  una matriz de  ceros del tamano B,B  matriz cuadrada que seria en la
+% linea anterior escogida por el valor maximo de losnodos relaionados
+Ybus = zeros(B,B);
+% valores fuera de la diagonal
+for i = 1:1:size(lineas,1)  %tamano de la matriz lineas en la columna 1
+    k = lineas(i,1); 
+    m = lineas (i,2);
+    zkm = lineas(i,3)+ 1j*lineas(i,4);
+    Ybus(k,m)= (-1/zkm);
+    Ybus(m,k) = Ybus (k,m);
+end
+% elementos de la diagona principal 
+Ybus = Ybus - diag(sum(Ybus,2));
+for i = 1:size(lineas,1)  %tamano de la matriz lineas en la columna 1
+    m = lineas (i,2);  gm = lineas (i,5);  bm = lineas (i,6);
+    Ybus(m,m)=gm+1j*bm + Ybus(m,m);
+    
+end
